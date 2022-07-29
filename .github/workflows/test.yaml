@@ -8,10 +8,12 @@ on:
 
 jobs:
   test:
-    name: Test all changes 💫
+    name: Job di test
     runs-on: ubuntu-latest
 
     steps:
+      # This action checks-out your repository under
+      # $GITHUB_WORKSPACE, so your workflow can access it.
       - uses: actions/checkout@master
       - name: Set up Python 3.9
         uses: actions/setup-python@v1
@@ -23,15 +25,5 @@ jobs:
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
 
-      - name: Set environment for branch
-        run: |
-          if [[ $GITHUB_REF == 'refs/heads/master' ]]; then
-              echo "SEGRETO1=develop" >> "$GITHUB_ENV"
-              echo "SEGRETO2=staging" >> "$GITHUB_ENV"
-          else
-              echo "SEGRETO1=${{ steps.extract_branch.outputs.branch }}" >> "$GITHUB_ENV"
-              echo "SEGRETO2=production" >> "$GITHUB_ENV"
-          fi
-
       - name: Echo env
-        run: echo $SEGRETO1 echo $SEGRETO2
+        run: echo $GITHUB_REF
