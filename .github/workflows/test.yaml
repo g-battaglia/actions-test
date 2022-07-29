@@ -18,13 +18,18 @@ jobs:
         with:
           python-version: 3.9
 
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
       - name: Set environment for branch
         run: |
           if [[ $GITHUB_REF == 'refs/heads/master' ]]; then
-              echo "SEGRETO1=my-project-stg" >> "$GITHUB_ENV"
+              echo "SEGRETO1=develop" >> "$GITHUB_ENV"
               echo "SEGRETO2=staging" >> "$GITHUB_ENV"
           else
-              echo "SEGRETO1=my-project-prd" >> "$GITHUB_ENV"
+              echo "SEGRETO1=${{ steps.extract_branch.outputs.branch }}" >> "$GITHUB_ENV"
               echo "SEGRETO2=production" >> "$GITHUB_ENV"
           fi
 
