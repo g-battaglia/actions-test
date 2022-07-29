@@ -1,0 +1,32 @@
+name: Publish Python 🐍 distributions 📦 to PyPI
+
+on:
+  push:
+    branches:
+      - master
+      - dev*
+
+jobs:
+  test:
+    name: Test all changes 💫
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@master
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.9
+
+      - name: Set environment for branch
+        run: |
+          if [[ $GITHUB_REF == 'refs/heads/master' ]]; then
+              echo "SEGRETO1=my-project-stg" >> "$GITHUB_ENV"
+              echo "SEGRETO2=staging" >> "$GITHUB_ENV"
+          else
+              echo "SEGRETO1=my-project-prd" >> "$GITHUB_ENV"
+              echo "SEGRETO2=production" >> "$GITHUB_ENV"
+          fi
+
+      - name: Echo env
+        run: echo $SEGRETO1 echo $SEGRETO2
