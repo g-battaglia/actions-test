@@ -27,3 +27,4 @@ jobs:
 
       - name: Echo env
         run: echo $GITHUB_REF
+        
